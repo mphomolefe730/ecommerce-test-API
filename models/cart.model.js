@@ -20,7 +20,7 @@ const cartModelSchema = new Mongoose.Schema({
         },price:{
             type:Number,
             required:true
-        }
+        },_id:false
     }]
 })
 
