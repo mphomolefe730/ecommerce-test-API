@@ -11,7 +11,7 @@ roleLinkConnection.get('/',async (req,res)=>{
     const allRoles = await roleModel.find();
     res.send(allRoles);
 })
-roleLinkConnection.delete(':id',async (req,res)=>{
+roleLinkConnection.delete('/:id',async (req,res)=>{
     try {
         const { id } = req.params;
         const response = await roleModel.findByIdAndDelete(id);
