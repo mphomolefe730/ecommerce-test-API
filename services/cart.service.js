@@ -14,6 +14,7 @@ export class CartService{
         try {
             //get user id
             const userCart = await cartModel.findOne({ userId: id });
+            if (!userCart) return res.status(404).json(`oops. Seems like we cant find your cart`);
             return userCart;
         } catch (error) {
             console.error(error);

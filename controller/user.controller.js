@@ -1,29 +1,27 @@
 import Express from "express";
-import { userModel } from '../models/user.model.js';
+import { UserService } from "../services/user.service.js";
 
 export const userLinkConnection = Express.Router();
+let userServiceManager = new UserService();
 
-// ###############################################
-// ############## POST USER ###################
-// ###############################################
 userLinkConnection.post('/add', async (req,res)=>{
-    try {
-        const user = await userModel.create(req.body);
-        res.status(200).json(`user(s) added to database`)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json(`failed to add user`)
-    }
-}) 
+    await userServiceManager.createNewUser(req,res);
+    res.send(`user(s) added to database`)
+})
+
+userLinkConnection.get('/',async (req,res)=>{
+    const allUsers = await userServiceManager.getAllUsers(res);
+    res.send(allUsers);
+})
+
 userLinkConnection.get('/:id',async (req,res)=>{
-    try {
-        const { id } = req.params;
-        const user = await userModel.findById(id);
-        if (!user) return res.status(404).json(`user with id(${id}) not found`)
-        res.status(200).json(user);
-    } catch (error) {
-        console.error(error);
-        const { id } = req.params;
-        res.status(500).json(`failed to get user with id(${id})`)        
-    }
+    const { id } = req.params;
+    const user = await userServiceManager.getUserById(id,res)
+    res.send(user);
+})
+
+userLinkConnection.put('/:id',async(req,res)=>{
+    const { id } = req.params;
+    const updatedUser = await userServiceManager.editUserInformation(id,req);
+    res.send(updatedUser);
 })

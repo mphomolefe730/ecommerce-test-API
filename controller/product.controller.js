@@ -59,6 +59,6 @@ productinkConnect.put('/:id',async (req,res)=>{
     } catch (error) {
         console.error(error);
         const { id } = req.params;
-        res.status(500).json(`failed to update product with id(${id})`)       
+        res.status(500).json(`failed to update product with id(${id})`);       
     }
 })

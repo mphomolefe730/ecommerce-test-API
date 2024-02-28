@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import Mongoose from "mongoose";
 
 const userModelSchema = new Mongoose.Schema({
@@ -17,6 +18,11 @@ const userModelSchema = new Mongoose.Schema({
         require:[true,'user number is required'],
         type: Number
     },
+    role:{
+        type: ObjectId,
+        required: true,
+        ref: 'Role'
+    }
 })
 
 export const userModel = Mongoose.model("User",userModelSchema)
