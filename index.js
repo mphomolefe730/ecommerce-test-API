@@ -1,5 +1,6 @@
 import Express, { urlencoded } from 'express';
 import Mongoose from 'mongoose';
+import Cors from 'cors';
 import { environment } from './environments.js';
 import { productinkConnect } from './controller/product.controller.js';
 import { userLinkConnection } from './controller/user.controller.js';
@@ -11,7 +12,10 @@ const app = Express();
 // this will send the request as an express json file
 app.use(Express.json());
 //enable the use of url requests
-app.use(urlencoded({extended:true}))
+app.use(urlencoded({extended:true}));
+app.use(Cors({
+    origin:'*',
+}))
 
 app.use('/api/products', productinkConnect);
 app.use('/api/user', userLinkConnection);
