@@ -11,7 +11,7 @@ export class inventoryService{
     }
     async getAllInventoryLog(res){
         try {
-            const allInventory = await inventoryModel.find();
+            const allInventory = await inventoryModel.find().populate("user");
             return allInventory
         } catch (error) {
             res.send(error);

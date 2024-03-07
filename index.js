@@ -7,6 +7,7 @@ import { userLinkConnection } from './controller/user.controller.js';
 import { cartLinkConnection } from './controller/cart.controller.js'
 import { roleLinkConnection } from './controller/role.controller.js';
 import { inventoryLinkConnection  } from './controller/inventory.controller.js';
+import { homeManagementLinkConnection } from './controller/home-management.control.js';
 
 const app = Express();
 // this will send the request as an express json file
@@ -22,6 +23,7 @@ app.use('/api/user', userLinkConnection);
 app.use('/api/cart', cartLinkConnection);
 app.use('/api/role',roleLinkConnection);
 app.use('/api/inventory', inventoryLinkConnection);
+app.use('/api/home-management', homeManagementLinkConnection);
 
 Mongoose.connect(`mongodb+srv://${environment.mongodb.username}:${environment.mongodb.password}@ecommercetest.oasiffg.mongodb.net/?retryWrites=true&w=majority&appName=ecommerceTest`)
 .then(()=>{

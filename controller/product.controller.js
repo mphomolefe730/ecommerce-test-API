@@ -23,7 +23,13 @@ productinkConnect.post('/add', async (req,res)=>{
 productinkConnect.get('/:id',async (req,res)=>{
     try {
         const { id } = req.params;
-        const product = await productModel.findById(id);
+        const product = await productModel.findById(id).populate([
+            {
+                path:"seller",
+                select:"name"
+            },
+            "categories"
+        ]);
         if (!product) return res.status(404).json(`product with id(${id}) not found`)
         res.status(200).json(product);
     } catch (error) {
@@ -35,7 +41,13 @@ productinkConnect.get('/:id',async (req,res)=>{
 
 productinkConnect.get('/',async (req,res)=>{
     try {
-        const product = await productModel.find();
+        const product = await productModel.find().populate([
+            {
+                path:"seller",
+                select:"name"
+            },
+            "categories"
+        ]);;
         if (!product) return res.status(404).json(`products not found`)
         res.status(200).json(product);
     } catch (error) {
@@ -54,8 +66,8 @@ productinkConnect.put('/:id',async (req,res)=>{
         const { id } = req.params;
         const product = await productModel.findByIdAndUpdate(id,req.body);
         if (!product) return res.status(404).json(`product with id(${id}) not found`);
-        const uodatedProduct = await productModel.findById(id);
-        res.status(200).json(updtaedProduct);
+        const updatedProduct = await productModel.findById(id);
+        res.status(200).json(updatedProduct);
     } catch (error) {
         console.error(error);
         const { id } = req.params;

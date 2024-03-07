@@ -7,7 +7,7 @@ export class CartService{
             return product;
         } catch (error) {
             console.error(error);
-            res.status(500).json(`failed to add product to cart`)
+            res.status(500).json(`failed to add product to cart`);
         }
     }
     async getCartByUserId(id,res){
