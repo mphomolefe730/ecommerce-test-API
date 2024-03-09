@@ -6,7 +6,12 @@ const inventorySchema = new Mongoose.Schema({
         required:true,
         type: ObjectId,
         ref:"User"
-    }, 
+    },
+    seller:{
+        type:ObjectId,
+        ref: "User",
+        required:true
+    },
     items:[{
         productId: {
             type: ObjectId,
@@ -24,7 +29,11 @@ const inventorySchema = new Mongoose.Schema({
     }],
     total:{
         type:Number
-    },},
+    },
+    status:{
+        type:String,
+        required:true
+    }},
     {
         timestamp:true
     }
