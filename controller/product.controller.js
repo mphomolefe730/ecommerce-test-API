@@ -47,13 +47,35 @@ productinkConnect.get('/',async (req,res)=>{
                 select:"name"
             },
             "categories"
-        ]);;
+        ]);
         if (!product) return res.status(404).json(`products not found`)
         res.status(200).json(product);
     } catch (error) {
         console.error(error);
         const { id } = req.params;
         res.status(500).json(`failed to get product with id(${id})`)        
+    }
+})
+
+productinkConnect.get('/seller/:id',async (req,res)=>{
+    try {
+        const { id } = req.params;
+        const products = await productModel.find({
+            'seller':{
+                $in:id
+            }
+        }).populate(
+            {
+                path:"user",
+                select:"name"
+            }
+        );
+        if (!products) return res.status(404).json(`products by user(${id}) not found`)
+        res.status(200).json(products);
+    } catch (error) {
+        console.error(error);
+        const { id } = req.params;
+        res.status(500).json(`failed to get user products with id(${id})`)        
     }
 })
 
