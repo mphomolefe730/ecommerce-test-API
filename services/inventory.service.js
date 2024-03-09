@@ -27,6 +27,9 @@ export class inventoryService{
                 {
                     path:'user',
                     select: 'name'
+                },{
+                    path:'items.productId',
+                    select: 'name'
                 }
             ]);
             if(!sellerOrder) return res.send("No inventory found");
