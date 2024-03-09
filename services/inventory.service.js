@@ -23,7 +23,12 @@ export class inventoryService{
                 'seller':{
                     $in:id
                 }
-            }).populate('user')
+            }).populate([
+                {
+                    path:'user',
+                    select: 'name'
+                }
+            ]);
             if(!sellerOrder) return res.send("No inventory found");
             return sellerOrder;
         } catch (error) {
