@@ -12,11 +12,16 @@ const userModelSchema = new Mongoose.Schema({
     },
     email:{
         require:[true,'user email is required'],
-        type: String
+        type: String,
+        unique: [true, "user email exist"]
     },
     number:{
         require:[true,'user number is required'],
         type: Number
+    },
+    hashedPassword:{
+        require: [true, 'user password is required'],
+        type: "string"
     },
     role:{
         type: ObjectId,
