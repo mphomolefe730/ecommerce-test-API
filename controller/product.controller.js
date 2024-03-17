@@ -1,5 +1,6 @@
 import Express from "express";
-import { productModel } from '../models/product.model.js'
+import { productModel } from '../models/product.model.js';
+import { Auth } from '../middleware/auth.js';
 
 export const productinkConnect = Express.Router();
 
@@ -83,7 +84,7 @@ productinkConnect.get('/seller/:id',async (req,res)=>{
 // #################################################
 // ############## UPDATE PRODUCT ###################
 // #################################################
-productinkConnect.put('/:id',async (req,res)=>{
+productinkConnect.put('/:id',Auth ,async (req,res)=>{
     try {
         const { id } = req.params;
         const product = await productModel.findByIdAndUpdate(id,req.body);
