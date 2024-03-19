@@ -30,4 +30,7 @@ Mongoose.connect(`mongodb+srv://${environment.mongodb.username}:${environment.mo
 .then(()=>{
     console.log('database connected');
     app.listen(3000,()=> console.log('server running'));
+}).catch((error)=>{
+    console.log(error);
+    console.log('failed to connect');
 })
