@@ -16,13 +16,13 @@ export class UserService{
                     const token = await jwt.sign({
                         userId: data[0]._id,
                         name:data[0].name,
-                        email: email
+                        email: email,
+                        role: data[0].role
                     },environment.JWTSecretkey,{
                         'expiresIn':'12h'
                     })
                     return res.status(200).json({
                         message: 'login successful',
-                        userName: data[0].name,
                         token
                     });
                 }
