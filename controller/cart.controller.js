@@ -5,8 +5,9 @@ export const cartLinkConnection = Express.Router();
 let cartServiceManager = new CartService();
 
 cartLinkConnection.post('/add', async (req,res)=>{
-    await cartServiceManager.createNewCart(req,res);
-    res.status(200).json(`product(s) added to cart`)
+    let cart = await cartServiceManager.createNewCart(req,res);
+    res.status(200).json(`product(s) added to cart`);
+    return cart;
 }) 
 
 cartLinkConnection.get('/:id',async(req,res)=>{
@@ -17,7 +18,7 @@ cartLinkConnection.get('/:id',async(req,res)=>{
 
 cartLinkConnection.put('/:id',async (req,res)=>{
     const { id } = req.params;
-    const updatedCart = await updateUserCartId(id,req,res);
-    // res.status(200).json(updatedCart);
-    res.send(updatedCart);
+    await cartServiceManager.updateUserCartId(id,req,res);
 })
+
+// cartLinkConnection.get('')
