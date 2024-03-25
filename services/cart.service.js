@@ -12,12 +12,14 @@ export class CartService{
     }
     async getCartByUserId(id,res){
         try {
+            //get user id
             const userCart = await cartModel.findOne({ userId: id }).populate(
                 {
-                    path:'items.productId'
+                    path: 'items.productId',
+                    select: 'name price image description seller'
                 }
             );
-            if (!userCart) return res.status(404).json({message:`oops. Seems like we cant find your cart`});
+            if (!userCart) return res.status(404).json(`oops. Seems like we cant find your cart`);
             return userCart;
         } catch (error) {
             console.error(error);
