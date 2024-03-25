@@ -3,6 +3,9 @@ import Express from "express";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import { environment } from "../environments.js";
+import { CartService } from './cart.service.js';
+
+const cartService = new CartService();
 
 export class UserService{
     async logInUser(req,res){ 
@@ -17,7 +20,8 @@ export class UserService{
                         userId: data[0]._id,
                         name:data[0].name,
                         email: email,
-                        role: data[0].role
+                        role: data[0].role,
+                        cartId: data[0].cartId
                     },environment.JWTSecretkey,{
                         'expiresIn':'12h'
                     })
@@ -37,7 +41,9 @@ export class UserService{
             const {email} = req.body
             const existingUser = await this.getUserByEmail(email);
             if (!existingUser) {
-                const {name,surname,email,number,hashedPassword,role} = req.body;
+                const {
+                    name,surname,email,number,hashedPassword,role,
+                     businessName, businessDescription} = req.body;
                 const tempPassword = await bcrypt.hash(hashedPassword,10);
                 let user = new userModel({
                     name:name,
@@ -45,11 +51,21 @@ export class UserService{
                     email:email,
                     number:number,
                     role:role,
-                    hashedPassword: tempPassword
-                })
-                user.save().then(result=> res.send(`user(s) added to database`));
-                console.log(user)
-                return user;
+                    hashedPassword: tempPassword,
+                    businessName: businessName,
+                    businessDescription: businessDescription
+                });
+                await user.save().then(async (result)=>{
+                    await cartService.createNewCart({
+                        userId: user._id,
+                        items: [],
+                    },).then((data)=>{
+                        const { _id } = data;
+                        user.cartId = _id;
+                        user.save();
+                        return user;
+                    });
+                });
             };
             if (existingUser) res.send({ message:'user email already exist'});
         } catch (error) {
@@ -58,7 +74,9 @@ export class UserService{
         }
     }
     async getAllUsers(res){
-        const listOfUsers = await userModel.find();
+        const page = req.body.page || 0;
+        const amountToSend = 10;
+        const listOfUsers = await userModel.find().skip(page * amountToSend).limit(amountToSend);
         if (!listOfUsers) return res.status(404).json(`users not found on database`)
         return listOfUsers;
     }
@@ -84,6 +102,23 @@ export class UserService{
         } catch (error) {
             console.log(error);
             Express.response.send('error getting email')
+        }
+    }
+    async searchForUser(req,res){
+        try {
+            const page = req.body.page || 0;
+            const amountToSend = 10;
+            const { search } = req.body;
+            const listOfSearchedUsers = await userModel.find({
+                'name': {
+                    $regex: search,
+                    $options: "i" 
+                }
+            }).skip(page * amountToSend).limit(amountToSend);
+            return res.send(listOfSearchedUsers);
+        } catch (error) { 
+            console.log(error);
+            return res.send(error);            
         }
     }
     async editUserInformation(id,req,res){

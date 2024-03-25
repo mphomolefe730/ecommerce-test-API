@@ -10,7 +10,10 @@ export const productinkConnect = Express.Router();
 productinkConnect.post('/add', async (req,res)=>{
     try {
         const product = await productModel.create(req.body);
-        return res.status(200).json(`product(s) added to database`)
+        return res.status(200).json({
+            message: 'product(s) added to database',
+            productId: product._id
+        })
     } catch (error) {
         console.error(error);
         return res.status(500).json(`failed to add product`)
@@ -40,9 +43,29 @@ productinkConnect.get('/:id',async (req,res)=>{
     }
 })
 
+productinkConnect.post('/items/search',async (req,res)=>{
+    try {
+        const page = req.body.page || 0;
+        const amountToSend = 10;
+        const { search } = req.body;
+        const listOfSearchedProduct = await productModel.find({
+            'name': {
+                $regex: search, 
+                $options: 'i' 
+            }
+        }).skip(page * amountToSend).limit(amountToSend);
+        return res.send(listOfSearchedProduct);
+    } catch (error) {
+        console.log(error);
+        return res.send(error);
+    }
+})
+
 productinkConnect.get('/',async (req,res)=>{
     try {
-        const product = await productModel.find().populate([
+        const page = req.body.page || 0;
+        const amountToSend = 10;
+        const product = await productModel.find().skip(page * amountToSend).limit(amountToSend).populate([
             {
                 path:"seller",
                 select:"name"
@@ -84,7 +107,7 @@ productinkConnect.get('/seller/:id',async (req,res)=>{
 // #################################################
 // ############## UPDATE PRODUCT ###################
 // #################################################
-productinkConnect.put('/:id',Auth ,async (req,res)=>{
+productinkConnect.put('/:id' ,async (req,res)=>{
     try {
         const { id } = req.params;
         const product = await productModel.findByIdAndUpdate(id,req.body);

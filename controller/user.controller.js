@@ -6,7 +6,15 @@ export const userLinkConnection = Express.Router();
 let userServiceManager = new UserService();
 
 userLinkConnection.post('/add', async (req,res)=>{
-    await userServiceManager.createNewUser(req,res);
+    const user = await userServiceManager.createNewUser(req,res);
+    if (user){
+        res.send(
+            {
+                message: `user(s) added to database`,
+                user: user
+            }
+        );
+    }
 })
 userLinkConnection.post('/login',async (req,res)=>{
     await userServiceManager.logInUser(req,res);
@@ -15,6 +23,10 @@ userLinkConnection.post('/login',async (req,res)=>{
 userLinkConnection.get('/',async (req,res)=>{
     const allUsers = await userServiceManager.getAllUsers(res);
     res.send(allUsers);
+})
+
+userLinkConnection.post('/search', async (req,res)=>{
+    const users = await userServiceManager.searchForUser(req,res);
 })
 
 userLinkConnection.get('/:id',async (req,res)=>{
