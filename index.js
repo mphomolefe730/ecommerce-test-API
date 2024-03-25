@@ -1,6 +1,7 @@
 import Express, { urlencoded } from 'express';
 import Mongoose from 'mongoose';
 import Cors from 'cors';
+import { annoucementModel} from './models/announcement.model.js'
 import { environment } from './environments.js';
 import http from 'http';
 import {Socket} from 'socket.io';
@@ -43,6 +44,15 @@ app.use('/api/cart', cartLinkConnection);
 app.use('/api/role',roleLinkConnection);
 app.use('/api/inventory', inventoryLinkConnection);
 app.use('/api/home-management', homeManagementLinkConnection);
+
+app.get('/api/status',async (req,res)=>{
+    const ann = await annoucementModel.find();
+    return res.send(ann);
+})
+app.post('/api/status/add',async (req,res)=>{
+    const ann = await annoucementModel.create(req.body);
+    return res.send({message:'add',ann});
+})
 
 Mongoose.connect(`mongodb+srv://${environment.mongodb.username}:${environment.mongodb.password}@ecommercetest.oasiffg.mongodb.net/?retryWrites=true&w=majority&appName=ecommerceTest`)
 .then(()=>{
