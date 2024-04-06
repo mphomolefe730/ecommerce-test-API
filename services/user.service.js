@@ -19,15 +19,15 @@ export class UserService{
                     const token = await jwt.sign({
                         userId: data[0]._id,
                         name:data[0].name,
-                        email: email,
                         role: data[0].role,
-                        cartId: data[0].cartId
+                        cartId: data[0].cartId,
                     },environment.JWTSecretkey,{
                         'expiresIn':'12h'
                     })
                     return res.status(200).json({
                         message: 'login successful',
-                        token
+                        token,
+                        profileImage:data[0].profileImage
                     });
                 }
             });
@@ -43,7 +43,7 @@ export class UserService{
             if (!existingUser) {
                 const {
                     name,surname,email,number,hashedPassword,role,
-                     businessName, businessDescription} = req.body;
+                     businessName, businessDescription, profileImage} = req.body;
                 const tempPassword = await bcrypt.hash(hashedPassword,10);
                 let user = new userModel({
                     name:name,
@@ -53,7 +53,8 @@ export class UserService{
                     role:role,
                     hashedPassword: tempPassword,
                     businessName: businessName,
-                    businessDescription: businessDescription
+                    businessDescription: businessDescription,
+                    profileImage: profileImage,
                 });
                 await user.save().then(async (result)=>{
                     await cartService.createNewCart({

@@ -16,11 +16,11 @@ const userModelSchema = new Mongoose.Schema({
         unique: [true, "user email exist"]
     },
     businessName:{
-        require:[true, 'business Name need'],
+        require:false,
         type: String
     },
     businessDescription:{
-        require:[true, 'business Description needed'],
+        require:false,
         type:String
     },
     number:{
@@ -40,6 +40,10 @@ const userModelSchema = new Mongoose.Schema({
         type: ObjectId,
         require: false,
         ref: 'Cart'
+    },
+    profileImage:{
+        type:String,
+        require:false
     }
 })
 
