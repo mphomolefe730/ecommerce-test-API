@@ -113,10 +113,16 @@ productinkConnect.put('/:id' ,async (req,res)=>{
         const product = await productModel.findByIdAndUpdate(id,req.body);
         if (!product) return res.status(404).json(`product with id(${id}) not found`);
         const updatedProduct = await productModel.findById(id);
-        return res.status(200).json(updatedProduct);
+        return res.send({
+            status: "SUCCESS",
+            object: updatedProduct
+        });
     } catch (error) {
         console.error(error);
         const { id } = req.params;
-        return res.status(500).json(`failed to update product with id(${id})`);       
+        return res.send({
+            status: "ERROR",
+            message:`failed to update product with id(${id})`
+        });       
     }
 })

@@ -35,7 +35,7 @@ userLinkConnection.get('/:id',async (req,res)=>{
     res.send(user);
 })
 
-userLinkConnection.put('/:id',Auth,async(req,res)=>{
+userLinkConnection.put('/:id',async(req,res)=>{
     const { id } = req.params;
     const updatedUser = await userServiceManager.editUserInformation(id,req);
     res.send(updatedUser);
