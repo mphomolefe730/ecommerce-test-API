@@ -74,7 +74,7 @@ export class UserService{
             return res.status(500).json(`failed to add user`);
         }
     }
-    async getAllUsers(res){
+    async getAllUsers(req,res){
         const page = req.body.page || 0;
         const amountToSend = 10;
         const listOfUsers = await userModel.find().skip(page * amountToSend).limit(amountToSend);
@@ -88,7 +88,6 @@ export class UserService{
             return foundUser;
         } catch (error) {
             console.error(error);
-            const { id } = req.params;
             return res.status(500).json(`failed to get user with id(${id})`)  
         }
     }
@@ -102,7 +101,7 @@ export class UserService{
             if (existingUseEmail.length!=0) return existingUseEmail;
         } catch (error) {
             console.log(error);
-            Express.response.send('error getting email')
+            return res.send('error getting email')
         }
     }
     async searchForUser(req,res){
@@ -116,6 +115,7 @@ export class UserService{
                     $options: "i" 
                 }
             }).skip(page * amountToSend).limit(amountToSend);
+            console.log(listOfSearchedUsers);
             return res.send(listOfSearchedUsers);
         } catch (error) { 
             console.log(error);
