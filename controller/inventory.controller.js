@@ -10,7 +10,10 @@ inventoryLinkConnection.post('/add',async(req,res)=>{
 });
 inventoryLinkConnection.get('/', async (req,res)=>{
     const totalInventoryLog = await inventoryServiceManager.getAllInventoryLog(res);
-    res.send(totalInventoryLog);
+    res.status(202).json({
+        message: "all the inventory",
+        products: totalInventoryLog
+    });
 });
 inventoryLinkConnection.get('/:id',async (req,res)=>{
     const { id } = req.params;

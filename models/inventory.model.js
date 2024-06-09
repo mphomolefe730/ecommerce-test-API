@@ -33,7 +33,14 @@ const inventorySchema = new Mongoose.Schema({
     status:{
         type:String,
         required:true
-    }},
+    },
+    chat:[{
+        chatId:{
+            type:ObjectId,
+            ref:"Chat"
+        }
+    }]
+    },
     {
         timestamp:true
     }

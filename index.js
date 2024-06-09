@@ -13,6 +13,7 @@ import { cartLinkConnection } from './controller/cart.controller.js'
 import { roleLinkConnection } from './controller/role.controller.js';
 import { inventoryLinkConnection  } from './controller/inventory.controller.js';
 import { homeManagementLinkConnection } from './controller/home-management.control.js';
+import { chatLinkConnection } from './controller/chat.controller.js';
 const app = Express();
 // this will send the request as an express json file
 app.use(Express.json());
@@ -44,6 +45,7 @@ app.use('/api/cart', cartLinkConnection);
 app.use('/api/role',roleLinkConnection);
 app.use('/api/inventory', inventoryLinkConnection);
 app.use('/api/home-management', homeManagementLinkConnection);
+app.use('/api/chat', chatLinkConnection);
 
 app.get('/api/status',async (req,res)=>{
     const ann = await annoucementModel.find();

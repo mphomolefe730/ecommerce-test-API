@@ -1,9 +1,28 @@
 import { inventoryModel } from "../models/inventory.model.js";
+import { chatModel } from '../models/chat.model.js';
 
 export class inventoryService{
     async addNewItem(req,res){
         try {
-            const newLog = await inventoryModel.create(req.body);
+            let chat ='';
+            if (req.body.chat[0].chat != null) {
+                chat  = await chatModel.create(
+                    {
+                        chat: req.body.chat[0].chat,
+                        send: req.body.user
+                    }
+                );
+            }
+            const newLog = new inventoryModel({
+                user: req.body.user,
+                seller: req.body.seller,
+                items: req.body.items,
+                status: req.body.status,
+                chat:{
+                    chatId: (req.body.chat[0].chat != null) ? chat._Id : NULL
+                }
+               
+            });
             return newLog;
         } catch (error) {
             res.send(error);
@@ -11,7 +30,12 @@ export class inventoryService{
     }
     async getAllInventoryLog(res){
         try {
-            const allInventory = await inventoryModel.find().populate("user");
+            const allInventory = await inventoryModel.find().populate([
+                {
+                    path: "user",
+                    select: "_id name surname"
+                },
+            ]);
             return allInventory
         } catch (error) {
             res.send(error);
