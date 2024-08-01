@@ -35,14 +35,16 @@ const inventorySchema = new Mongoose.Schema({
         required:true
     },
     chat:[{
+        _id:false,
         chatId:{
             type:ObjectId,
-            ref:"Chat"
+            required:false,
+            ref:"Chat",
         }
     }]
     },
     {
-        timestamp:true
+        timestamps:true
     }
 )
 

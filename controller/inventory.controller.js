@@ -5,21 +5,24 @@ export const inventoryLinkConnection = Express.Router();
 const inventoryServiceManager = new inventoryService();
 
 inventoryLinkConnection.post('/add',async(req,res)=>{
-    const log = await inventoryServiceManager.addNewItem(req,res);
-    res.send(log);
+    await inventoryServiceManager.addNewItem(req,res);
 });
 inventoryLinkConnection.get('/', async (req,res)=>{
     const totalInventoryLog = await inventoryServiceManager.getAllInventoryLog(res);
     res.status(202).json({
-        message: "all the inventory",
+        message: "success",
         products: totalInventoryLog
     });
 });
-inventoryLinkConnection.get('/:id',async (req,res)=>{
+inventoryLinkConnection.get('/seller/:id',async (req,res)=>{
     const { id } = req.params;
-    const sellersOrders = await inventoryServiceManager.getInventoryBySeller(id,res);
-    res.send(sellersOrders);
+    await inventoryServiceManager.getInventoryBySeller(id,res);
 });
+
+inventoryLinkConnection.get('/:id',async (req,res)=>{
+    const { id } = req.params
+    await inventoryServiceManager.getInventoryById(id,res)
+})
 
 inventoryLinkConnection.put('/:id',async (req,res)=>{
     const { id } = req.params;
