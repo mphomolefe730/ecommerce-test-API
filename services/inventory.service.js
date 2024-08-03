@@ -50,8 +50,8 @@ export class inventoryService{
     async getInventoryBySeller(id,res){
         try {
             const sellerOrder = await inventoryModel.find({
-                'seller':{
-                    $in:id
+                'seller': {
+                    $in: id
                 }
             }).populate([
                 {
@@ -63,7 +63,7 @@ export class inventoryService{
                 }
             ]);
             if(!sellerOrder) return res.send("No inventory found");
-            res.status(200).json(sellersOrders);
+            res.status(200).json(sellerOrder);
         } catch (error) {
             res.status(500).json(error);
         }
