@@ -2,7 +2,7 @@ import Mongoose from "mongoose";
 
 const roleModelSchema = new Mongoose.Schema({
     role:{
-        required: [true, 'product needs a name'],
+        required: [true, 'role needs a name'],
         type: String
     }
 })

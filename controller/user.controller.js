@@ -21,7 +21,7 @@ userLinkConnection.post('/login',async (req,res)=>{
 })
 
 userLinkConnection.get('/',async (req,res)=>{
-    const allUsers = await userServiceManager.getAllUsers(res);
+    const allUsers = await userServiceManager.getAllUsers(req, res);
     res.send(allUsers);
 })
 

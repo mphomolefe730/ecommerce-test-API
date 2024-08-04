@@ -33,7 +33,9 @@ export class UserService{
             });
         } catch (error) {
             console.error(error);
-            return res.status(500).json(`failed to access user`);
+            return res.status(500).json({
+                message: `failed to access user`
+            });
         }
     }
     async createNewUser(req,res){
@@ -43,7 +45,7 @@ export class UserService{
             if (!existingUser) {
                 const {
                     name,surname,email,number,hashedPassword,role,
-                     businessName, businessDescription, profileImage} = req.body;
+                     profileImage} = req.body;
                 const tempPassword = await bcrypt.hash(hashedPassword,10);
                 let user = new userModel({
                     name:name,
@@ -52,8 +54,6 @@ export class UserService{
                     number:number,
                     role:role,
                     hashedPassword: tempPassword,
-                    businessName: businessName,
-                    businessDescription: businessDescription,
                     profileImage: profileImage,
                 });
                 await user.save().then(async (result)=>{
@@ -74,7 +74,7 @@ export class UserService{
             return res.status(500).json(`failed to add user`);
         }
     }
-    async getAllUsers(res){
+    async getAllUsers(req,res){
         const page = req.body.page || 0;
         const amountToSend = 10;
         const listOfUsers = await userModel.find().skip(page * amountToSend).limit(amountToSend);
