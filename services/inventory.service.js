@@ -63,7 +63,9 @@ export class inventoryService{
                 }
             ]);
             if(!sellerOrder) return res.send("No inventory found");
-            res.status(200).json(sellerOrder);
+            res.status(200).json({
+                order: sellerOrder
+            });
         } catch (error) {
             res.status(500).json(error);
         }

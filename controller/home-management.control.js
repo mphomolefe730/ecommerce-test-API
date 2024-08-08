@@ -25,8 +25,8 @@ homeManagementLinkConnection.get('/active',async (req,res)=>{
     res.send(activeCategory);
 })
 
-homeManagementLinkConnection.get('/category/:id',async (req,res)=>{
+homeManagementLinkConnection.put('/category/:id',async (req,res)=>{
     const {id} = req.params;
-    const productsOfcategory = await homeManagementServiceManager.getByCategory(id,res);
+    const productsOfcategory = await homeManagementServiceManager.getByCategory(id,req,res);
     res.send(productsOfcategory);
 })

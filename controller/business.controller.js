@@ -33,3 +33,8 @@ businessLinkConnection.get("/:name",async (req,res)=>{
     const { name } = req.params;
     await businessServiceManager.getBusinessByName(name,res);
 })
+
+businessLinkConnection.get("/seller/:id",async (req,res)=>{
+    const { id } = req.params;
+    await businessServiceManager.getBusinessBySellerId(id,res)
+})

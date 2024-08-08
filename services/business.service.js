@@ -43,6 +43,22 @@ export class BusinessService{
         })
         if (res) res.send(businessObject);
         if (businessObject.length != 0) return businessObject;
+        else return res.status(404).json({message:"business not found"})
+    } 
+
+    async getBusinessBySellerId(sellerId,res){
+        try {
+            let businessObject = await businessLogModel.findOne({ memberId: sellerId }).populate({
+                path:"business"
+            });
+            if (businessObject) return res.status(200).json({message:"success",object:businessObject});
+            res.status(404).json({message:"business not found"})
+        } catch (error) {
+            res.status(500).json({
+                message: "Error",
+                body: error
+            })            
+        }
     } 
 
     async getAllBusiness(res){

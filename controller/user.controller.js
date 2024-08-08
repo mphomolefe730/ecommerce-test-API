@@ -7,14 +7,6 @@ let userServiceManager = new UserService();
 
 userLinkConnection.post('/add', async (req,res)=>{
     const user = await userServiceManager.createNewUser(req,res);
-    if (user){
-        res.send(
-            {
-                message: `user(s) added to database`,
-                user: user
-            }
-        );
-    }
 })
 userLinkConnection.post('/login',async (req,res)=>{
     await userServiceManager.logInUser(req,res);

@@ -15,14 +15,6 @@ const userModelSchema = new Mongoose.Schema({
         type: String,
         unique: [true, "user email exist"]
     },
-    businessName:{
-        require:false,
-        type: String
-    },
-    businessDescription:{
-        require:false,
-        type:String
-    },
     number:{
         require:[true,'user number is required'],
         type: Number

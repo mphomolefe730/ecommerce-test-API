@@ -20,14 +20,16 @@ export class homeManagementService{
             res.status(500).json(`failed add categories`);            
         }
     }
-    async getByCategory(id,res){
+    async getByCategory(id,req,res){
         try {
+            const page = req.body.page || 0;
+            const amountToSend = 10;
             const products = await productModel.find({ 
                 'categories': { 
                     $in: id 
                 }
-            })
-            if (!products) return res.send("category not found");
+            }).skip(page * amountToSend).limit(amountToSend)
+            if (!products) return res.status(404).send("category not found");
             return products;
         } catch (error) {
             console.error(error);

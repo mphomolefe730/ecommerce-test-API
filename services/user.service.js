@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import { environment } from "../environments.js";
 import { CartService } from './cart.service.js';
+import { roleModel } from "../models/role.model.js";
 
 const cartService = new CartService();
 
@@ -57,18 +58,26 @@ export class UserService{
                     profileImage: profileImage,
                 });
                 await user.save().then(async (result)=>{
-                    await cartService.createNewCart({
-                        userId: user._id,
-                        items: [],
-                    },).then((data)=>{
-                        const { _id } = data;
-                        user.cartId = _id;
-                        user.save();
-                        return user;
+                    const roleForSeller = await roleModel.find({
+                        "role":{$regex:"seller", $options: "i" }
                     });
+                    //seller dont get a cart
+                    if (roleForSeller[0]._id != role){
+                        await cartService.createNewCart({
+                            userId: user._id,
+                            items: [],
+                        },).then((data)=>{
+                            const { _id } = data;
+                            user.cartId = _id;
+                            user.save();
+                            return res.status(201).json({message: "success"});
+                        });
+                    }else{
+                        return res.status(201).json({message: "success"});
+                    }
                 });
             };
-            if (existingUser) res.send({ message:'user email already exist'});
+            if (existingUser) res.status(400).json({ message:'user email already exist'});
         } catch (error) {
             console.error(error);
             return res.status(500).json(`failed to add user`);
