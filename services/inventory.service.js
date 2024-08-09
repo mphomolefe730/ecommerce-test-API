@@ -63,12 +63,33 @@ export class inventoryService{
                 }
             ]);
             if(!sellerOrder) return res.send("No inventory found");
-            res.status(200).json({
+            return res.status(200).json({
                 order: sellerOrder
             });
         } catch (error) {
             res.status(500).json(error);
         }
+    }
+
+    async getInventoryBySellerAndCatergory(id,catergory,req,res){
+        const page = req.body.page || 0;
+        const amountToSend = 10;
+        const sellerInventory = await inventoryModel.find({
+            'seller': {
+                $in: id
+            }
+        }).populate([
+            {
+                path:'user',
+                select: 'name'
+            },{
+                path:'items.productId',
+                select: 'name'
+            }
+        ]).skip(page * amountToSend).limit(amountToSend);
+        let filteredList;
+        if(sellerInventory) filteredList = await sellerInventory.filter((a)=>a.status == catergory);
+        if(filteredList) return res.status(200).json({message:"success",order:filteredList})
     }
     
     async getInventoryById(id,res){
@@ -95,12 +116,12 @@ export class inventoryService{
     async updateInventoryItem(id,req,res){
         try {
             const product = await inventoryModel.findByIdAndUpdate(id,req.body);
-            if (!product) return res.status(404).json(`enquiry with id(${id}) not found`);
+            if (!product) return res.status(404).json({message:"error",error: `enquiry with id(${id}) not found`});
             const updatedProduct = await inventoryModel.findById(id);
-            res.status(200).json(updatedProduct);
+            return res.status(200).json({message:"success",order:updatedProduct});
         } catch (error) {
             console.error(error);
-            res.status(500).json(`failed to update enquiry with id(${id})`);             
+            res.status(500).json({message:"error",error:`failed to update enquiry with id(${id})`});             
         }
     }
 }

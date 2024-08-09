@@ -28,7 +28,7 @@ export class homeManagementService{
                 'categories': { 
                     $in: id 
                 }
-            }).skip(page * amountToSend).limit(amountToSend)
+            }).skip(page * amountToSend).limit(amountToSend);
             if (!products) return res.status(404).send("category not found");
             return products;
         } catch (error) {
