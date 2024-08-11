@@ -36,6 +36,10 @@ const userModelSchema = new Mongoose.Schema({
     profileImage:{
         type:String,
         require:false
+    },
+    verified:{
+        type:Boolean,
+        required:true
     }
 })
 

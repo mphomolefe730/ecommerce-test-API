@@ -5,12 +5,13 @@ import { businessUserStatusModel } from "../models/businessUserStatus.model.js";
 
 export class BusinessService{
     async createNewBusiness(req,res){
-        const { businessName,businessDescription,userId } = req.body;
+        const { businessName,businessDescription, profileImage,userId } = req.body;
         const businessExist = await this.getBusinessByName(businessName);
         if (!businessExist){
             let businessObject = new businessModel({
                 businessName: businessName,
-                businessDescription: businessDescription
+                businessDescription: businessDescription,
+                profileImage:profileImage
             })
             const ownerRole = await businessUserStatusModel.find({
                 "role":{

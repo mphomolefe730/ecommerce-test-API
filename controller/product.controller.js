@@ -1,6 +1,7 @@
 import Express from "express";
 import { productModel } from '../models/product.model.js';
 import { Auth } from '../middleware/auth.js';
+import { businessLogModel } from '../models/businessLog.model.js'
 
 export const productinkConnect = Express.Router();
 
@@ -27,6 +28,7 @@ productinkConnect.post('/add', async (req,res)=>{
 productinkConnect.get('/:id',async (req,res)=>{
     try {
         const { id } = req.params;
+        let filterListBuyers=[]
         const product = await productModel.findById(id).populate([
             {
                 path:"seller",
@@ -34,8 +36,17 @@ productinkConnect.get('/:id',async (req,res)=>{
             },
             "categories"
         ]);
+        const productUnderOrg = await businessLogModel.find({memberId: product.seller},'business memberId').populate({
+            path: "business",
+            select: "businessName _id"
+        });
+        if (productUnderOrg) productUnderOrg.forEach(log=>filterListBuyers.unshift(log.business))
         if (!product) return res.status(404).json(`product with id(${id}) not found`)
-        return res.status(200).json(product);
+        return res.status(200).json({
+            status:"success",
+            productInfo: product,
+            businessInfo: filterListBuyers
+        });
     } catch (error) {
         console.error(error);
         const { id } = req.params;

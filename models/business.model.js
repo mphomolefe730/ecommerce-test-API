@@ -9,6 +9,10 @@ const businessSchema = new Mongoose.Schema(
         businessDescription:{
             type:String,
             required:true
+        },
+        profileImage:{
+            type:String,
+            require:false
         }
     },
     {
