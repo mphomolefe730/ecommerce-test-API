@@ -7,7 +7,7 @@ const businessServiceManager = new BusinessService();
 
 businessLinkConnection.post('/add', async (req,res)=>{
     await businessServiceManager.createNewBusiness(req,res);
-})
+});
 
 businessLinkConnection.post('/add/log', async (req,res)=>{
     const { businessId, userId, status, adminRole } = req.body;    
@@ -23,18 +23,18 @@ businessLinkConnection.post('/add/log', async (req,res)=>{
         adminRoles: adminRole
     };
     await businessServiceManager.createBusinessLog(businessLog,res);
-})
+});
 
 businessLinkConnection.get("/",async (req,res)=>{    
     await businessServiceManager.getAllBusiness(res);
-})
+});
 
 businessLinkConnection.get("/:name",async (req,res)=>{   
     const { name } = req.params;
     await businessServiceManager.getBusinessByName(name,res);
-})
+});
 
 businessLinkConnection.get("/seller/:id",async (req,res)=>{
     const { id } = req.params;
     await businessServiceManager.getBusinessBySellerId(id,res)
-})
+});

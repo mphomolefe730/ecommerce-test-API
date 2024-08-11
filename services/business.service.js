@@ -2,6 +2,8 @@ import Express from "express";
 import { businessModel } from '../models/business.model.js'
 import { businessLogModel } from "../models/businessLog.model.js";
 import { businessUserStatusModel } from "../models/businessUserStatus.model.js";
+import { businessTipsSummaryModel } from '../models/businessTipSummary.model.js';
+import { businessTipsModel } from '../models/businessTip.model.js'
 
 export class BusinessService{
     async createNewBusiness(req,res){
@@ -76,6 +78,54 @@ export class BusinessService{
                 message: "Error",
                 body: err
             })
+        }
+    }
+    async getAllBusinessSummaryTips(req,res){
+        try {            
+            const page = req.body.page || 0;
+            const amountToSend = 10;
+            const listOfTips = await businessTipsSummaryModel.find({},"tipTitle tipDescription tipThumbnail businessTipId").skip(page * amountToSend).limit(amountToSend);
+            return res.status(200).json({status: 'success',object:listOfTips});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({status: 'error',message:"service currently unavailable"})
+        }
+    }
+    async addBusinessTipSummary(req,res){
+        try {
+            const summaryLog = await businessTipsSummaryModel.create(req.body);
+            res.status(201).json({status:"success",object:summaryLog});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({status:"error",object:error});
+        }
+    }
+    async addBusinessTip(req,res){
+        try {            
+            const tip = await businessTipsModel.create(req.body.tipBody);
+            if (!tip) return res.status(500).json({status:"error",object:"failed to create tip"});  
+            if (tip){
+                await businessTipsSummaryModel.create({
+                    tipTitle: tip.title,
+                    tipDescription: `${tip.description.substring(0,35)}...`,
+                    tipThumbnail: req.body.thumbnail,
+                    businessTipId: tip._id
+                });
+                return res.status(201).json({status:"success",object:tip});
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({status:"error",object:error});            
+        }
+    }
+    async getBusinessTipById(id,req,res){
+        try {
+            const tip = await businessTipsModel.find({_id:id});
+            if (!tip) return res.status(404).json({status:"error",message:"Business tip remove or doesnt exist anymore"});
+            return res.status(200).json({status:"success",object:tip});
+        } catch (error) {
+            console.log(error);
+            return res.status(404).json({status:"error",message:"opps something went wrong"});
         }
     }
 }
