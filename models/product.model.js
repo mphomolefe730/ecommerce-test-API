@@ -22,17 +22,22 @@ const productModelSchema = new Mongoose.Schema({
         required: [true, 'product stock not indicated'],
         type: Number
     },
-	seller:{
-		type:ObjectId,
-		required: true,
-		ref:"User"
-	},
-    categories:[{
+    seller:{
         type:ObjectId,
-        required:true,
-        ref:"Categorie",
-        _id:false
-    }]},
+        required: true,
+        ref:"User"
+    },
+    status:{
+        type: Boolean,
+    },
+    categories:[
+        {
+            type:ObjectId,
+            required:true,
+            ref:"Categorie",
+            _id:false
+        }
+    ]},
     {
         timestamp:true
     }

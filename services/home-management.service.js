@@ -24,11 +24,12 @@ export class homeManagementService{
         try {
             const page = req.body.page || 0;
             const amountToSend = 10;
-            const products = await productModel.find({ 
+            let products = await productModel.find({ 
                 'categories': { 
                     $in: id 
                 }
             }).skip(page * amountToSend).limit(amountToSend);
+            products = products.filter(n => n.status == true);
             if (!products) return res.status(404).send("category not found");
             return products;
         } catch (error) {

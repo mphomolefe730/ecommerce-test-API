@@ -48,12 +48,14 @@ productinkConnect.post('/items/search',async (req,res)=>{
         const page = req.body.page || 0;
         const amountToSend = 10;
         const { search } = req.body;
-        const listOfSearchedProduct = await productModel.find({
+        let listOfSearchedProduct = await productModel.find({
             'name': {
                 $regex: search, 
                 $options: 'i' 
             }
         }).skip(page * amountToSend).limit(amountToSend);
+        //console.log("search###############################: \n\n", listOfSearchedProduct);
+        listOfSearchedProduct = listOfSearchedProduct.filter(n => n.status == true);
         return res.send(listOfSearchedProduct);
     } catch (error) {
         console.log(error);
