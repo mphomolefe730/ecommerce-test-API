@@ -30,6 +30,10 @@ const productModelSchema = new Mongoose.Schema({
     status:{
         type: Boolean,
     },
+    reviews:[{
+        type: ObjectId,
+        required: false,
+    }],
     categories:[
         {
             type:ObjectId,

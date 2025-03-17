@@ -17,6 +17,7 @@ import { chatLinkConnection } from './controller/chat.controller.js';
 import { businessLinkConnection } from './controller/business.controller.js';
 import { businessRoleLinkConnection } from "./controller/businessUserStatus.controller.js";
 import { businessTipsLinkConnection } from './controller/businessTips.controller.js';
+import { reviewLinkConnection} from './controller/review.controller.js';
 
 const app = Express();
 // this will send the request as an express json file
@@ -53,6 +54,7 @@ app.use('/api/home-management', homeManagementLinkConnection);
 app.use('/api/chat', chatLinkConnection);
 app.use('/api/business', businessLinkConnection);
 app.use('/api/businessTips', businessTipsLinkConnection);
+app.use('/api/review', reviewLinkConnection);
 
 app.get('/api/status',async (req,res)=>{
     const ann = await annoucementModel.find();
