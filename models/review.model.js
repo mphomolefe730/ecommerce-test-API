@@ -3,9 +3,19 @@ import { ObjectId } from "mongodb";
 
 const reviewSchema = new Mongoose.Schema(
     {
+        orderId:{
+            type: ObjectId,
+            ref: 'Inventory',
+            require: true
+        },
         orderStatus:{
             type: String,
             require: true
+        },
+        productId:{
+            type: ObjectId,
+            require: true,
+            ref: 'Product'
         },
         rank:{
             type: Number,
@@ -17,7 +27,8 @@ const reviewSchema = new Mongoose.Schema(
         },
         user: {
             type: ObjectId,
-            require: true
+            require: true,
+            ref: 'User'
         },
         parentComment:{
             Type: ObjectId,
@@ -32,4 +43,4 @@ const reviewSchema = new Mongoose.Schema(
     }
 );
 
-export const reviewModel = Mongoose.model('review', reviewSchema);
+export const reviewModel = Mongoose.model('Review', reviewSchema);
