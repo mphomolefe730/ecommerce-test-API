@@ -124,4 +124,28 @@ export class inventoryService{
             res.status(500).json({message:"error",error:`failed to update enquiry with id(${id})`});             
         }
     }
+    
+    async getUserProductInventoryByStatus(productId, userId, status, req, res){
+        try{
+            const item = await inventoryModel.find({
+                'user': {
+                    $in: userId
+                },'status': {
+                    $in: status
+                },'items.productId': {
+                    $in: productId
+                }
+            });
+            if(!item) return res.status(200).json({
+                status: false
+            });
+
+            return res.status(200).json({
+                status: "success",
+                inventory: item
+            });
+        }catch(error){
+            console.log(error);
+        }
+    }
 }

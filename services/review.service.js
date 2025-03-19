@@ -5,18 +5,31 @@ export class ReviewService{
     async getReview(id, req,res){
         const page = req.body.page || 0;
         const amountToSend = 10;
-        const reviews = reviewModel.findById(id).skip(page * amountToSend).limit(amountToSend);
+        const reviews = await reviewModel.find({ productId: id }).populate(
+            {
+                path: 'user',
+                select: 'name'
+            }
+        ).skip(page * amountToSend).limit(amountToSend);
 
         if(!reviews) return res.status(200).json({
-            status: fail,
-            message: "no comments on product"
+            status: 'fail',
+            message: 'no comments on product'
         });
-        console.log(reviews);
         return res.status(200).json({
-            status: "success",
+            status: 'success',
+            reviews: reviews
         })
     }
     async addReview(id, req, res){
-        return res.send("add works");
+        const reviewObject = await reviewModel.create(req.body);
+        if(!reviewObject) return res.status(500).json({
+            status: 'fail',
+            message: 'failed to add your comment'
+        });
+        if(reviewObject) return res.status(200).json({
+            status: 'success',
+            message: 'review successfully added'
+        });
     }
 };

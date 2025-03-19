@@ -35,3 +35,8 @@ inventoryLinkConnection.put('/:id',async (req,res)=>{
     const updatedProduct = await inventoryServiceManager.updateInventoryItem(id,req,res);
     // res.send(updatedProduct);
 })
+
+inventoryLinkConnection.get('/:productId/:userId/:status', async (req, res)=>{
+    const {productId, userId, status} = req.params;
+    await inventoryServiceManager.getUserProductInventoryByStatus(productId, userId, status, req, res);
+})
