@@ -11,8 +11,7 @@ export class ReviewService{
                 select: 'name'
             }
         ).skip(page * amountToSend).limit(amountToSend);
-
-        if(!reviews) return res.status(200).json({
+        if(reviews.length < 1) return res.status(200).json({
             status: 'fail',
             message: 'no comments on product'
         });
